@@ -1,3 +1,4 @@
+
 const PATH_TO_RATING_FILE = "./dataset/rating.json";
 
 let WEIGHT = {

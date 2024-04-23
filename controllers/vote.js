@@ -1,5 +1,6 @@
 const parseBody = require("../appModules/http-utils/parse-body");
-const { config, weight, createRating, updateRating } = require("../appModules/rating");
+const fs = require('fs').promises;
+const { PATH_TO_RATING_FILE, WEIGHT, createRating, updateRating } = require("../appModules/rating/index");
 
 async function voteRouteController(req, res) {
     if (req.method !== "POST") {
@@ -7,20 +8,20 @@ async function voteRouteController(req, res) {
         res.end("Not Found");
     } else {
         try {
-            const body = await parseBody(res);
             res.statusCode = 200;
+            const body = await parseBody(req)
             let data = JSON.parse(body);
-            let rating = createRating(data, weight)
-            const ratingFile = await fs.readFile(config);
+            let rating = createRating(data, WEIGHT)
+            const ratingFile = await fs.readFile(PATH_TO_RATING_FILE);
             const ratingArray = JSON.parse(ratingFile);
-            const newRating = updateRating(ratingArray, data.id, rating);
-            await fs.writeFile(config, JSON.stringify(newRating));
+            const newRating = updateRating(ratingArray, data.id, rating)
+            await fs.writeFile(PATH_TO_RATING_FILE, JSON.stringify(newRating));
             res.setHeader("Content-Type", "application/json");
             res.end(JSON.stringify(newRating.sort((a, b) => b.rating - a.rating)));
         } catch (error) {
             res.statusCode = 500;
             res.end("Internal Server Error");
-        }
+        };  
     };
 };
 

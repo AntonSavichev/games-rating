@@ -11,4 +11,6 @@ async function parseBody(req) {
       reject(error)
     });
   })
-} 
+};
+
+module.exports = parseBody;

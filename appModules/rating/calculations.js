@@ -12,4 +12,4 @@ function createRating(obj, weight) {
     return array;
   } 
 
-  module.exports = {createRating, updateRating};
+module.exports = {createRating, updateRating};
